@@ -1,0 +1,18 @@
+<form action="/empresa/vaga/create" method="POST">
+    <label for="titulo">Título da Vaga</label>
+    <input type="text" name="titulo" id="titulo" required>
+
+    <label for="descricao">Descrição da Vaga</label>
+    <textarea name="descricao" id="descricao" required></textarea>
+
+    <label for="quantidade">Quantidade de Vagas</label>
+    <input type="number" name="quantidade" id="quantidade" required>
+
+    <label for="horario">Horário de Trabalho</label>
+    <input type="text" name="horario" id="horario" required>
+
+    <label for="preco">Preço (opcional)</label>
+    <input type="number" name="preco" id="preco">
+
+    <button type="submit">Cadastrar Vaga</button>
+</form>

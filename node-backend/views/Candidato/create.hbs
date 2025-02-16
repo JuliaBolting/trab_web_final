@@ -1,0 +1,18 @@
+<form action="/candidato/create" method="POST" enctype="multipart/form-data">
+    <label for="foto">Foto</label>
+    <input type="file" name="foto" id="foto" required>
+
+    <label for="nome">Nome</label>
+    <input type="text" name="nome" id="nome" required>
+
+    <label for="area">Área de Interesse</label>
+    <input type="text" name="area" id="area" required>
+
+    <label for="experiencia">Experiência</label>
+    <textarea name="experiencia" id="experiencia" required></textarea>
+
+    <label for="procurandoEmprego">Está procurando emprego?</label>
+    <input type="checkbox" name="procurandoEmprego" id="procurandoEmprego">
+
+    <button type="submit">Criar Currículo</button>
+</form>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Vaga: {{vaga.titulo}}</title>
+</head>
+<body>
+    <h1>{{vaga.titulo}}</h1>
+    <p>{{vaga.descricao}}</p>
+    <p>Quantidade de vagas: {{vaga.quantidade}}</p>
+    <p>Horário: {{vaga.horario}}</p>
+    <p>Preço: {{vaga.preco}}</p>
+
+    <h2>Candidatos</h2>
+    {{#each vaga.candidatos}}
+        <div>
+            <p>{{this.nome}}</p>
+            <a href="/empresa/candidato/{{this.id}}">Ver Currículo</a>
+        </div>
+    {{/each}}
+</body>
+</html>

@@ -1,0 +1,18 @@
+<form action="/empresa/vaga/edit/{{vaga.id}}" method="POST">
+    <label for="titulo">Título da Vaga</label>
+    <input type="text" name="titulo" id="titulo" value="{{vaga.titulo}}" required>
+
+    <label for="descricao">Descrição da Vaga</label>
+    <textarea name="descricao" id="descricao" required>{{vaga.descricao}}</textarea>
+
+    <label for="quantidade">Quantidade de Vagas</label>
+    <input type="number" name="quantidade" id="quantidade" value="{{vaga.quantidade}}" required>
+
+    <label for="horario">Horário de Trabalho</label>
+    <input type="text" name="horario" id="horario" value="{{vaga.horario}}" required>
+
+    <label for="preco">Preço (opcional)</label>
+    <input type="number" name="preco" id="preco" value="{{vaga.preco}}">
+
+    <button type="submit">Atualizar Vaga</button>
+</form>
