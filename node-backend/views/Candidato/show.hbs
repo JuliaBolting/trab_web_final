@@ -44,7 +44,6 @@
         </div>
     </div>
     <div class="container main-container">
-        <!-- Sidebar Esquerda -->
         <div class="sidebar">
             <button class="btn btn-primary w-100 mb-2">Currículo</button>
 
@@ -60,10 +59,16 @@
                     <button type="submit" class="btn btn-outline-primary w-100">Inscrições</button>
                 </a>
             </form>
+            <div class="text-center mt-4">
+                <form action="/usuario/logout" method="post">
+                    <button type="submit" class="btn btn-danger w-100"
+                        style="padding: 12px; font-size: 16px; border-radius: 10px;">Sair</button>
+                </form>
+            </div>
+
 
         </div>
 
-        <!-- Currículo -->
         <div class="content">
 
             <form action="/candidato/index/{{candidato.id}}" method="get">
@@ -71,7 +76,6 @@
                 <h2 class="text-center">Currículo de {{candidato.nome}}</h2>
 
                 <div class="text-center">
-                    <!-- Foto do candidato, se não tiver foto, exibe uma imagem padrão -->
                     <img src="/node-backend/public/img/{{#if candidato.foto}}{{candidato.foto}}{{else}}naruto.jpg{{/if}}"
                         alt="Foto de {{candidato.nome}}" class="rounded-circle" width="150">
                 </div>
@@ -89,7 +93,6 @@
 
                 <hr>
 
-                <!-- Formação Acadêmica -->
                 <h3>Formação Acadêmica</h3>
                 <p>Formações encontradas: {{formacoes.length}}</p> <!-- Para garantir o número de entradas -->
                 {{#if formacoes.length}}
@@ -107,7 +110,6 @@
 
                 <hr>
 
-                <!-- Certificações -->
                 <h3>Certificações</h3>
                 {{#if certificacoes.length}}
                 <ul>
@@ -127,7 +129,6 @@
 
                 <hr>
 
-                <!-- Link para editar o currículo -->
                 <a href="/candidato/edit/{{candidato.id}}">
                     <button type="submit" class="btn btn-outline-secondary w-100 mt-2">Editar Currículo</button>
                 </a>
@@ -136,7 +137,6 @@
         </div>
 
 
-        <!-- Notificações -->
         <div class="notifications">
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="procurandoEmprego" {{#if

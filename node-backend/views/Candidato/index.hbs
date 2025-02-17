@@ -4,298 +4,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{#if candidato}}Editar Currículo de {{candidato.nome}}{{else}}Criar Currículo{{/if}}</title>
+    <title>Currículo de {{candidato.nome}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .main-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 100px 0px;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .sidebar {
+            width: 200px;
         }
 
         .content {
-            width: 100%;
-            max-width: 800px;
+            flex-grow: 1;
+            max-width: 600px;
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .notifications {
+            width: 250px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container main-container">
-        <div class="content">
 
-            <form action="/candidato/edit/{{candidato.id}}" method="post">
-                <h2 class="text-center">{{#if candidato}}Editar Currículo de {{candidato.nome}}{{else}}Criar
-                    Currículo{{/if}}</h2>
-
-                <label for="foto">Foto</label>
-                <input type="file" name="foto" id="foto" class="form-control">
-                <br>
-
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome" class="form-control" value="{{candidato.nome}}" required>
-                <br>
-
-                <label for="localizacao">Localização</label>
-                <input type="text" name="localizacao" id="localizacao" class="form-control"
-                    value="{{#if candidato}}{{candidato.localizacao}}{{else}}""{{/if}}" required>
-                <br>
-
-                <label for="setor">Setor</label>
-                <input type="text" name="setor" id="setor" class="form-control"
-                    value="{{#if candidato}}{{candidato.setor}}{{else}}""{{/if}}" required>
-                <br>
-
-                <label for="resumo">Resumo</label>
-                <textarea name="resumo" id="resumo"
-                    class="form-control">{{#if candidato}}{{candidato.resumo}}{{else}}""{{/if}}</textarea>
-                <br>
-
-                <label for="disponivel">Disponível para trabalho</label>
-                <input type="checkbox" name="disponivel" id="disponivel" {{#if candidato}}{{#if
-                    candidato.disponivel}}checked{{/if}}{{/if}}>
-                <br><br>
-
-                <!-- Formações Acadêmicas -->
-                <h3>Formações Acadêmicas</h3>
-
-                <div id="formacoes-container">
-                    {{#if formacoes}}
-                    {{#each formacoes}}
-                    <div class="form-group">
-                        <label for="instituicao_{{this.id}}">Instituição</label>
-                        <input type="text" name="formacao[{{this.id}}][instituicao]" id="instituicao_{{this.id}}"
-                            class="form-control" value="{{this.instituicao}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="grau_{{this.id}}">Grau</label>
-                        <select name="formacao[{{this.id}}][grau]" id="grau_{{this.id}}" class="form-control" required>
-                            <option value="Técnico" {{#if (eq this.grau "Técnico" )}}selected{{/if}}>Técnico</option>
-                            <option value="Ensino Médio" {{#if (eq this.grau "Ensino Médio" )}}selected{{/if}}>Ensino
-                                Médio
-                            </option>
-                            <option value="Graduação" {{#if (eq this.grau "Graduação" )}}selected{{/if}}>Graduação
-                            </option>
-                            <option value="Pós-Graduação" {{#if (eq this.grau "Pós-Graduação" )}}selected{{/if}}>
-                                Pós-Graduação</option>
-                            <option value="Mestrado" {{#if (eq this.grau "Mestrado" )}}selected{{/if}}>Mestrado</option>
-                            <option value="Doutorado" {{#if (eq this.grau "Doutorado" )}}selected{{/if}}>Doutorado
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="curso_{{this.id}}">Curso</label>
-                        <input type="text" name="formacao[{{this.id}}][curso]" id="curso_{{this.id}}"
-                            class="form-control" value="{{this.curso}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ano_inicio_{{this.id}}">Ano de Início</label>
-                        <input type="number" name="formacao[{{this.id}}][ano_inicio]" id="ano_inicio_{{this.id}}"
-                            class="form-control" value="{{this.ano_inicio}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ano_conclusao_{{this.id}}">Ano de Conclusão</label>
-                        <input type="number" name="formacao[{{this.id}}][ano_conclusao]" id="ano_conclusao_{{this.id}}"
-                            class="form-control" value="{{this.ano_conclusao}}">
-                    </div>
-                    <hr>
-                    {{/each}}
-                    {{else}}
-                    <!-- Se não houver formações, campos em branco para adicionar novas -->
-                    <div class="form-group">
-                        <label for="instituicao_1">Instituição</label>
-                        <input type="text" name="formacao[0][instituicao]" id="instituicao_1" class="form-control"
-                            value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="grau_1">Grau</label>
-                        <select name="formacao[0][grau]" id="grau_1" class="form-control" required>
-                            <option value="Técnico">Técnico</option>
-                            <option value="Ensino Médio">Ensino Médio</option>
-                            <option value="Graduação">Graduação</option>
-                            <option value="Pós-Graduação">Pós-Graduação</option>
-                            <option value="Mestrado">Mestrado</option>
-                            <option value="Doutorado">Doutorado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="curso_1">Curso</label>
-                        <input type="text" name="formacao[0][curso]" id="curso_1" class="form-control" value=""
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ano_inicio_1">Ano de Início</label>
-                        <input type="number" name="formacao[0][ano_inicio]" id="ano_inicio_1" class="form-control"
-                            value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="ano_conclusao_1">Ano de Conclusão</label>
-                        <input type="number" name="formacao[0][ano_conclusao]" id="ano_conclusao_1" class="form-control"
-                            value="0">
-                    </div>
-
-                    <hr>
-                    {{/if}}
-
-                </div>
-                <button type="button" class="btn btn-secondary mb-3" onclick="adicionarFormacao()">Adicionar</button>
-
-                <!-- Certificações -->
-                <h3>Certificações</h3>
-
-                <div id="certificacoes-container">
-                    {{#if certificacoes}}
-                    {{#each certificacoes}}
-                    <div class="form-group">
-                        <label for="certificado_nome_{{this.id}}">Nome da Certificação</label>
-                        <input type="text" name="certificacao[{{this.id}}][nome]" id="certificado_nome_{{this.id}}"
-                            class="form-control" value="{{this.nome}}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_instituicao_{{this.id}}">Instituição</label>
-                        <input type="text" name="certificacao[{{this.id}}][instituicao]"
-                            id="certificado_instituicao_{{this.id}}" class="form-control" value="{{this.instituicao}}"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_data_obtencao_{{this.id}}">Data de Obtenção</label>
-                        <input type="date" name="certificacao[{{this.id}}][data_obtencao]"
-                            id="certificado_data_obtencao_{{this.id}}" class="form-control"
-                            value="{{formatDate this.data_obtencao}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_validade_{{this.id}}">Validade</label>
-                        <input type="date" name="certificacao[{{this.id}}][validade]"
-                            id="certificado_validade_{{this.id}}" class="form-control"
-                            value="{{formatDate this.validade}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_link_{{this.id}}">Link do Certificado</label>
-                        <input type="text" name="certificacao[{{this.id}}][link_certificado]"
-                            id="certificado_link_{{this.id}}" class="form-control" value="{{this.link_certificado}}">
-                    </div>
-                    <hr>
-                    {{/each}}
-                    {{else}}
-                    <!-- Campos para nova certificação -->
-                    <div class="form-group">
-                        <label for="certificado_nome_1">Nome da Certificação</label>
-                        <input type="text" name="certificacao[0][nome]" id="certificado_nome_1" class="form-control"
-                            value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_instituicao_1">Instituição</label>
-                        <input type="text" name="certificacao[0][instituicao]" id="certificado_instituicao_1"
-                            class="form-control" value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_data_obtencao_1">Data de Obtenção</label>
-                        <input type="date" name="certificacao[0][data_obtencao]" id="certificado_data_obtencao_1"
-                            class="form-control" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_validade_1">Validade</label>
-                        <input type="date" name="certificacao[0][validade]" id="certificado_validade_1"
-                            class="form-control" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="certificado_link_1">Link do Certificado</label>
-                        <input type="text" name="certificacao[0][link_certificado]" id="certificado_link_1"
-                            class="form-control" value="">
-                    </div>
-
-                    <hr>
-                    {{/if}}
-
-                </div>
-
-                <button type="button" class="btn btn-secondary mb-3"
-                    onclick="adicionarCertificacao()">Adicionar</button>
-
-                <div class="my-4">
-                    <button type="submit" class="btn btn-primary w-100"
-                        style="padding: 12px; font-size: 16px; border-radius: 10px;">{{#if candidato}}Atualizar
-                        Currículo{{else}}Criar Currículo{{/if}}</button>
-                </div>
-
-                <div class="text-center my-3">
-                    <a href="/candidato/show/{{candidato.id}}" class="btn btn-outline-secondary w-100 mt-2">Voltar</a>
-                </div>
-            </form>
+    <div class="row text-center my-3">
+        <div>
+            <h1>LinkadIn</h1>
+            <h1>Talentos e Oportunidades</h1>
         </div>
     </div>
+    <div class="container main-container">
+        <div class="sidebar">
+            <button class="btn btn-primary w-100 mb-2">Currículo</button>
+
+            <form action="/candidato/vagas" method="get">
+                <a href="/candidato/vagas">
+                    <button type="submit" class="btn btn-outline-primary w-100">Vagas</button>
+                </a>
+            </form>
+
+            </form>
+            <form action="/candidato/inscricoes" method="get">
+                <a href="/candidato/inscricoes">
+                    <button type="submit" class="btn btn-outline-primary w-100">Inscrições</button>
+                </a>
+            </form>
+            <div class="text-center mt-4">
+                <form action="/usuario/logout" method="post">
+                    <button type="submit" class="btn btn-danger w-100"
+                        style="padding: 12px; font-size: 16px; border-radius: 10px;">Sair</button>
+                </form>
+            </div>
+
+
+        </div>
+
+        <div class="content">
+
+            <form action="/candidato/index/{{candidato.id}}" method="get">
+
+                <h2 class="text-center">Currículo de {{candidato.nome}}</h2>
+
+                <div class="text-center">
+                    <img src="/node-backend/public/img/{{#if candidato.foto}}{{candidato.foto}}{{else}}naruto.jpg{{/if}}"
+                        alt="Foto de {{candidato.nome}}" class="rounded-circle" width="150">
+                </div>
+
+                <p><strong>Área de Interesse:</strong> {{#if candidato.setor}}{{candidato.setor}}{{else}}Não
+                    especificado{{/if}}</p>
+                <p><strong>Localização:</strong> {{#if candidato.localizacao}}{{candidato.localizacao}}{{else}}Não
+                    especificado{{/if}}</p>
+                <p><strong>Resumo:</strong> {{#if candidato.resumo}}{{candidato.resumo}}{{else}}Não especificado{{/if}}
+                </p>
+                <p><strong>Disponível para trabalho:</strong> <span id="disponibilidadeText">{{#if
+                        candidato.disponivel}}Sim{{else}}Não{{/if}}</span></p>
+
+
+
+                <hr>
+
+                <h3>Formação Acadêmica</h3>
+                <p>Formações encontradas: {{formacoes.length}}</p>
+                {{#if formacoes.length}}
+                <ul>
+                    {{#each formacoes}}
+                    <li>
+                        <strong>{{this.curso}}</strong> - {{this.instituicao}} ({{this.ano_inicio}} -
+                        {{this.ano_conclusao}})
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p>Nenhuma formação acadêmica cadastrada.</p>
+                {{/if}}
+
+                <hr>
+
+                <h3>Certificações</h3>
+                {{#if certificacoes.length}}
+                <ul>
+                    {{#each certificacoes}}
+                    <li>
+                        <strong>{{this.nome}}</strong> - {{this.instituicao}} (Obtido em: {{this.data_obtencao}})
+                        {{#if this.validade}} - Válido até: {{this.validade}}{{/if}}
+                        {{#if this.link_certificado}}
+                        <a href="{{this.link_certificado}}" target="_blank">Ver Certificado</a>
+                        {{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p>Nenhuma certificação cadastrada.</p>
+                {{/if}}
+
+                <hr>
+
+                <a href="/candidato/edit/{{candidato.id}}">
+                    <button type="submit" class="btn btn-outline-secondary w-100 mt-2">Editar Currículo</button>
+                </a>
+
+            </form>
+        </div>
+
+
+        <div class="notifications">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="procurandoEmprego" {{#if
+                    candidato.disponivel}}checked{{/if}} onchange="atualizarDisponibilidade('{{candidato.id}}')">
+                <label class="form-check-label" for="procurandoEmprego">Procurando Emprego</label>
+            </div>
+            <h4>Notificações</h4>
+            {{#each candidato.notificacoes}}
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>{{this.mensagem}}</span>
+                <button class="btn btn-sm btn-secondary">Responder</button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
     <script>
-        let formacaoCount = 0;
-        let certificacaoCount = 0;
+        function atualizarDisponibilidade(candidatoId) {
+            const disponivel = document.getElementById('procurandoEmprego').checked ? 1 : 0;
+            const disponibilidadeText = document.getElementById('disponibilidadeText');
+            if (disponivel) {
+                disponibilidadeText.textContent = 'Sim';
+            } else {
+                disponibilidadeText.textContent = 'Não';
+            }
 
-        function adicionarFormacao() {
-            const container = document.getElementById('formacoes-container');
-            const formacaoHTML = `
-                <div class="form-group">
-                    <label for="instituicao_${formacaoCount}">Instituição</label>
-                    <input type="text" name="formacao[${formacaoCount}][instituicao]" id="instituicao_${formacaoCount}" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="grau_${formacaoCount}">Grau</label>
-                    <select name="formacao[${formacaoCount}][grau]" id="grau_${formacaoCount}" class="form-control" required>
-                        <option value="Técnico">Técnico</option>
-                        <option value="Ensino Médio">Ensino Médio</option>
-                        <option value="Graduação">Graduação</option>
-                        <option value="Pós-Graduação">Pós-Graduação</option>
-                        <option value="Mestrado">Mestrado</option>
-                        <option value="Doutorado">Doutorado</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="curso_${formacaoCount}">Curso</label>
-                    <input type="text" name="formacao[${formacaoCount}][curso]" id="curso_${formacaoCount}" class="form-control" required>
-                </div>
-                <hr>
-            `;
-            container.insertAdjacentHTML('beforeend', formacaoHTML);
-            formacaoCount++;
-        }
-
-        function adicionarCertificacao() {
-            const container = document.getElementById('certificacoes-container');
-            const certificacaoHTML = `
-                <div class="form-group">
-                    <label for="certificado_nome_${certificacaoCount}">Nome da Certificação</label>
-                    <input type="text" name="certificacao[${certificacaoCount}][nome]" id="certificado_nome_${certificacaoCount}" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="certificado_instituicao_${certificacaoCount}">Instituição</label>
-                    <input type="text" name="certificacao[${certificacaoCount}][instituicao]" id="certificado_instituicao_${certificacaoCount}" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="certificado_data_obtencao_${certificacaoCount}">Data de Obtenção</label>
-                    <input type="date" name="certificacao[${certificacaoCount}][data_obtencao]" id="certificado_data_obtencao_${certificacaoCount}" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="certificado_validade_${certificacaoCount}">Validade</label>
-                    <input type="date" name="certificacao[${certificacaoCount}][validade]" id="certificado_validade_${certificacaoCount}" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="certificado_link_${certificacaoCount}">Link do Certificado</label>
-                    <input type="text" name="certificacao[${certificacaoCount}][link_certificado]" id="certificado_link_${certificacaoCount}" class="form-control">
-                </div>
-                <hr>
-            `;
-            container.insertAdjacentHTML('beforeend', certificacaoHTML);
-            certificacaoCount++;
+            fetch(`/candidato/atualizarDisponibilidade/${candidatoId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disponivel })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        console.log("Status atualizado com sucesso!");
+                    } else {
+                        alert("Erro ao atualizar status!");
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Erro ao atualizar disponibilidade:", error);
+                });
         }
     </script>
+
 </body>
 
 </html>

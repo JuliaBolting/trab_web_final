@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
     const message = req.session.message;
-    req.session.message = null; // Limpa a mensagem após exibir
+    req.session.message = null;
     res.render("index", {layout: "Layout/main", title: "Página inicial", message});
 });
 
@@ -18,6 +18,7 @@ router.post('/usuario/create', webUsuarioController.store);
 router.post('/login', webUsuarioController.login);
 router.post('/usuario/password', webUsuarioController.recuperarSenha);
 router.post('/usuario/new-password', webUsuarioController.novaSenha);
+router.post('/usuario/logout', webUsuarioController.logout);
 
 
 router.get('/candidato/show/:id', webCurriculoController.show);

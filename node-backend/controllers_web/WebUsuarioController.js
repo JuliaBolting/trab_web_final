@@ -120,7 +120,7 @@ class WebUsuarioController {
             console.log(usuario.tipo);
             if (usuario.tipo === 'candidato') {
                 console.log("candidato");
-                return res.redirect(`/Candidato/index`);
+                return res.redirect(`/Candidato/index/${usuario.id}`);
             } else if (usuario.tipo === 'empresa') {
                 console.log("empresa");
                 return res.redirect(`empresa/index`);
@@ -227,6 +227,24 @@ class WebUsuarioController {
         } catch (error) {
             console.error('Erro ao cancelar inscrição:', error);
             return res.json({ success: false });
+        }
+    }
+
+    async logout(req, res) {
+        try {
+            // Destuir a sessão do usuário
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log("Erro ao destruir sessão:", err);
+                    return res.redirect("/"); // Redireciona em caso de erro
+                }
+    
+                // Redirecionar para a página inicial ou de login após destruir a sessão
+                return res.redirect("/"); // Pode ser '/login' ou a página que você desejar
+            });
+        } catch (error) {
+            console.log("Erro ao tentar deslogar:", error);
+            return res.redirect("/"); // Redireciona em caso de erro
         }
     }
 

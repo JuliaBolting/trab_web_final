@@ -67,7 +67,6 @@
         {{/if}}
 
         <div class="container main-container">
-            <!-- Sidebar Esquerda -->
             <div class="sidebar">
                 <form action="/candidato/index" method="get">
                     <a href="/candidato/index">
@@ -82,11 +81,9 @@
                 </form>
             </div>
 
-            <!-- Vagas -->
             <div class="content">
                 <h2 class="text-center">Vagas Disponíveis</h2>
 
-                <!-- Exibir mensagem de sucesso ou erro -->
                 {{#if message}}
                 <div class="alert alert-{{message.type}}">{{message.text}}</div>
                 {{/if}}
@@ -101,14 +98,12 @@
                         <p><strong>Salário:</strong> R$ {{this.salario}}</p>
                         <p><strong>Status:</strong> {{this.status}}</p>
 
-                        <!-- Detalhes adicionais -->
                         <div id="detalhes-{{this.id}}" class="vaga-detalhes">
                             <p><strong>Quantidade de Vagas:</strong> {{this.quantidade}}</p>
                             <p><strong>Data de Criação:</strong> {{this.dataCriacao}}</p>
                             <p><strong>Data de Atualização:</strong> {{this.dataAtualizacao}}</p>
                         </div>
 
-                        <!-- Botões -->
                         <div>
                             <button class="btn btn-primary w-100 mt-2" onclick="toggleDetalhes({{this.id}})">Ver
                                 Detalhes</button>
@@ -126,7 +121,6 @@
 
             </div>
 
-            <!-- Notificações -->
             <div class="notifications">
                 <h4>Notificações</h4>
                 {{#each candidato.notificacoes}}
@@ -142,7 +136,6 @@
 
     <script>
         function toggleDetalhes(vagaId) {
-            // Toggle visibility of the details section
             const detalhes = document.getElementById('detalhes-' + vagaId);
             const botao = event.target;
 

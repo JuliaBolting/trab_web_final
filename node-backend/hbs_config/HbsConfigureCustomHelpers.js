@@ -14,7 +14,7 @@ class HbsConfigureCustomHelpers {
         hbs.registerHelper("formatDate", function (date) {
             if (!date) return "";
             const d = new Date(date);
-            return d.toISOString().split("T")[0]; // Retorna YYYY-MM-DD
+            return d.toISOString().split("T")[0];
         });
     }
 };

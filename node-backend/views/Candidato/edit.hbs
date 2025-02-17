@@ -67,7 +67,6 @@
                     candidato.disponivel}}checked{{/if}}{{/if}}>
                 <br><br>
 
-                <!-- Formações Acadêmicas -->
                 <h3>Formações Acadêmicas</h3>
 
                 <div id="formacoes-container">
@@ -112,7 +111,6 @@
                     <hr>
                     {{/each}}
                     {{else}}
-                    <!-- Se não houver formações, campos em branco para adicionar novas -->
                     <div class="form-group">
                         <label for="instituicao_1">Instituição</label>
                         <input type="text" name="formacao[0][instituicao]" id="instituicao_1" class="form-control"
@@ -151,7 +149,6 @@
                 </div>
                 <button type="button" class="btn btn-secondary mb-3" onclick="adicionarFormacao()">Adicionar</button>
 
-                <!-- Certificações -->
                 <h3>Certificações</h3>
 
                 <div id="certificacoes-container">
@@ -188,7 +185,6 @@
                     <hr>
                     {{/each}}
                     {{else}}
-                    <!-- Campos para nova certificação -->
                     <div class="form-group">
                         <label for="certificado_nome_1">Nome da Certificação</label>
                         <input type="text" name="certificacao[0][nome]" id="certificado_nome_1" class="form-control"

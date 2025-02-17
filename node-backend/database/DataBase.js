@@ -35,9 +35,7 @@ class DataBase {
             password: config.get("db.password")
         });
 
-        // Lê o conteúdo do arquivo SQL
         const sql = await fs.readFile(filePath, 'utf8');
-        // Divide o SQL em comandos individuais e apaga espaços em branco do início e fim
         const commands = sql.split(';').map(cmd => cmd.trim());
 
         for (const command of commands) {

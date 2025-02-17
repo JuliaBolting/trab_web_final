@@ -42,7 +42,6 @@
     </div>
 
     <div class="container main-container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <form action="/candidato/show" method="get">
                 <a href="/candidato/show">
@@ -61,7 +60,6 @@
             </a>
         </div>
 
-        <!-- Inscrições -->
         <div class="content">
             <h2 class="text-center">Vagas Inscritas</h2>
 
@@ -82,7 +80,6 @@
             {{/if}}
         </div>
 
-        <!-- Notificações -->
         <div class="notifications">
             <h4>Notificações</h4>
             {{#each candidato.notificacoes}}
@@ -115,7 +112,7 @@
                 .then(function (data) {
                     if (data.success) {
                         alert("Você cancelou a inscrição com sucesso!");
-                        location.reload(); // Recarrega a página para refletir a mudança
+                        location.reload();
                     } else {
                         alert("Erro ao cancelar a inscrição.");
                     }
