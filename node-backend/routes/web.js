@@ -21,7 +21,7 @@ router.post('/usuario/new-password', webUsuarioController.novaSenha);
 
 
 router.get('/candidato/show/:id', webCurriculoController.show);
-router.get('/candidato/edit/:id', webCurriculoController.index);
+router.get('/candidato/index/:id', webCurriculoController.index);
 router.get('/candidato/vagas', webVagaController.show);
 router.get('/candidato/inscricoes', webUsuarioController.inscricoes);
 
@@ -32,6 +32,8 @@ router.post('/candidato/atualizarDisponibilidade/:id', webCurriculoController.at
 
 
 router.get('/empresa/index', webEmpresaController.index);
+router.get('/empresa/vagas/cadastrar', webEmpresaController.show);
+router.post('/empresa/vagas/criar', webEmpresaController.create);
 
 
 

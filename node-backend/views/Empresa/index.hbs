@@ -29,8 +29,13 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .notifications {
-            width: 250px;
+        .curriculo {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -43,7 +48,6 @@
         </div>
     </div>
     <div class="container main-container">
-        <!-- Sidebar Esquerda -->
         <div class="sidebar">
             <button class="btn btn-primary w-100 mb-2">Vagas</button>
             <form action="/empresa/vagas/cadastrar" method="get">
@@ -53,41 +57,55 @@
             </form>
         </div>
 
-        <!-- Vaga e Candidatos -->
         <div class="content">
-            <h2 class="text-center">{{vagas.titulo}}</h2>
-            <p><strong>Descrição:</strong> {{vagas.descricao}}</p>
-            <p><strong>Quantidade de Vagas:</strong> {{vagas.quantidade}}</p>
-            <p><strong>Horário:</strong> {{vagas.horario}}</p>
-            <p><strong>Preço:</strong> {{#if vagas.preco}}{{vagas.preco}}{{else}}Não especificado{{/if}}</p>
+            {{#each vagas}}
+            <div class="vaga">
+                <h2 class="text-center">{{titulo}}</h2>
+                <p><strong>Descrição:</strong> {{descricao}}</p>
+                <p><strong>Quantidade de Vagas:</strong> {{quantidade}}</p>
+                <p><strong>Horário:</strong> {{horario}}</p>
+                <p><strong>Preço:</strong> {{#if preco}}{{preco}}{{else}}Não especificado{{/if}}</p>
 
-            <h3>Candidatos</h3>
-            <label for="filtroCandidatos">Filtrar candidatos:</label>
-            <select id="filtroCandidatos" class="form-control" onchange="filtrarCandidatos()">
-                <option value="todos">Todos</option>
-                <option value="disponiveis">Disponíveis para trabalho</option>
-                <option value="reprovados">Reprovados</option>
-                <option value="contatados">Contatados</option>
-                <option value="agendados">Entrevista Agendada</option>
-                <option value="aprovados">Aprovados</option>
-            </select>
+                <h3>Candidatos</h3>
+                <div id="listaCandidatos">
+                    {{#each candidatos}}
+                    <div class="candidate-card mb-3">
+                        <p><strong>{{this.nome}}</strong></p>
+                        <button class="btn btn-info" onclick="toggleCurriculo({{this.id}})">Ver Currículo</button>
+                        <button class="btn btn-danger"
+                            onclick="reprovarCandidato({{this.id}}, {{../id}})">Reprovar</button>
+                        <button class="btn btn-warning" onclick="entrarEmContato({{this.id}}, {{../id}})">Entrar em
+                            Contato</button>
+                        <button class="btn btn-primary" onclick="agendarEntrevista({{this.id}}, {{../id}})">Agendar
+                            Entrevista</button>
+                        <button class="btn btn-success"
+                            onclick="aprovarCandidato({{this.id}}, {{../id}})">Aprovar</button>
 
-            <div id="listaCandidatos">
-                {{#each vagas.candidatos}}
-                <div class="candidate-card mb-3">
-                    <p><strong>{{this.nome}}</strong></p>
-                    <a href="/empresa/candidato/{{this.id}}" class="btn btn-info">Ver Currículo</a>
-                    <button class="btn btn-danger"
-                        onclick="reprovarCandidato({{this.id}}, {{vagas.id}})">Reprovar</button>
-                    <button class="btn btn-warning" onclick="entrarEmContato({{this.id}}, {{vagas.id}})">Entrar em
-                        Contato</button>
-                    <button class="btn btn-primary" onclick="agendarEntrevista({{this.id}}, {{vagas.id}})">Agendar
-                        Entrevista</button>
-                    <button class="btn btn-success"
-                        onclick="aprovarCandidato({{this.id}}, {{vagas.id}})">Aprovar</button>
+                        <div id="curriculo-{{this.id}}" class="curriculo">
+                            <p><strong>Área de Interesse:</strong> {{this.setor}}</p>
+                            <p><strong>Localização:</strong> {{this.localizacao}}</p>
+                            <p><strong>Resumo:</strong> {{this.resumo}}</p>
+                            <h4>Formação Acadêmica</h4>
+                            <ul>
+                                {{#each this.formacoes}}
+                                <li><strong>{{this.curso}}</strong> - {{this.instituicao}} ({{this.ano_inicio}} -
+                                    {{this.ano_conclusao}})</li>
+                                {{/each}}
+                            </ul>
+                            <h4>Certificações</h4>
+                            <ul>
+                                {{#each this.certificacoes}}
+                                <li><strong>{{this.nome}}</strong> - {{this.instituicao}} (Obtido em:
+                                    {{this.data_obtencao}})</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    {{/each}}
                 </div>
-                {{/each}}
             </div>
+            <hr>
+            {{/each}}
         </div>
     </div>
 
@@ -160,4 +178,5 @@
 
     </script>
 </body>
+
 </html>

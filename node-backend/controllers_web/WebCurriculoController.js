@@ -58,9 +58,15 @@ class WebCurriculoController {
             // Buscar candidato pelo ID
             const candidato = await CurriculoModel.findCandidatoId(id);
             if (!candidato) {
-                return res.status(404).send('Candidato não encontrado');
+                const usuario = await UsuarioModel.findById(id); // Supondo que tenha um método findById em UsuarioModel
+                if (usuario) {
+                    // Preencher com as informações do usuário
+                    candidato.nome = usuario.nome;
+                } else {
+                    return res.status(404).send('Candidato ou Usuário não encontrado');
+                }
             }
-            console.log("aqui", candidato);
+            console.log("candidato encontrado ou usuário usado:", candidato);
 
             // Buscar formações acadêmicas do candidato
             const formacoes = await CurriculoModel.findFormacaoCandidatoId(id);
@@ -71,7 +77,7 @@ class WebCurriculoController {
             console.log(certificacoes);
 
 
-            res.render('candidato/edit', {
+            res.render('Candidato/index', {
                 candidato,
                 formacoes: formacoes,
                 certificacoes: certificacoes

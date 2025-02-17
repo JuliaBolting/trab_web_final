@@ -51,20 +51,57 @@ class VagaModel {
         return null;
     }
 
-    static async findAll() {
-        const result = await DataBase.executeSQLQuery(`SELECT * FROM Vaga`);
-        if (result && result.length > 0) {
-            const modelArray = result.map(function (obj) {
-                obj = new VagaModel(obj);
-                return obj;
-            });
-            return modelArray;
+    static async findAll(empresaId) {
+        try {
+            console.log("findAll(empresaId", empresaId);
+            const vagas = await DataBase.executeSQLQuery(
+                `SELECT * FROM Vaga WHERE empresa_id = ? AND status = 'aberta'`,
+                [parseInt(empresaId)]
+            );
+
+            for (let vaga of vagas) {
+                vaga.candidatos = await DataBase.executeSQLQuery(
+                    `SELECT U.id, U.nome, U.foto, U.setor, U.localizacao, U.resumo, U.disponivel,
+                            F.curso, F.instituicao, F.ano_inicio, F.ano_conclusao,
+                            C.nome AS certificacao_nome, C.instituicao AS certificacao_instituicao, C.data_obtencao, C.validade, C.link_certificado
+                     FROM Candidatura C
+                     JOIN Usuario U ON C.candidato_id = U.id
+                     LEFT JOIN Formacao F ON U.id = F.usuario_id
+                     LEFT JOIN Certificacao C ON U.id = C.usuario_id
+                     WHERE C.vaga_id = ?`,
+                    [vaga.id]
+                );
+            }
             
+
+            return vagas;
+        } catch (error) {
+            console.error("Erro ao buscar vagas:", error);
+            throw error;
         }
-        return [];
+    }
+    
+
+    static async findOneByOne(usuarioId) {
+        const result = await DataBase.executeSQLQuery(`SELECT * FROM Empresa_Usuario WHERE usuario_id = ?`, [usuarioId]);
+        
+        if (result && result.length === 1) {
+            const empresaId = result[0].empresa_id; // Pega o id da empresa associada ao usuário
+            
+            // Agora, busque as informações completas da empresa usando o empresa_id
+            const empresaResult = await DataBase.executeSQLQuery(`SELECT * FROM Empresa WHERE id = ?`, [empresaId]);
+            
+            if (empresaResult && empresaResult.length === 1) {
+                console.log(empresaResult[0].id);
+                return empresaResult[0].id;
+            }
+        }
+        
+        return null;
     }
 
     async save() {
+        console.log("EmpresaModel save", this.empresa_id);
         const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Formata a data
         const result = await DataBase.executeSQLQuery(
             `INSERT INTO Vaga (empresa_id, titulo, descricao, salario, quantidade, status, dataCriacao, dataAtualizacao) 

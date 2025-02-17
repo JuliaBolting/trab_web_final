@@ -120,7 +120,7 @@ class WebUsuarioController {
             console.log(usuario.tipo);
             if (usuario.tipo === 'candidato') {
                 console.log("candidato");
-                return res.redirect(`/Candidato/show/${usuario.id}`);
+                return res.redirect(`/Candidato/index`);
             } else if (usuario.tipo === 'empresa') {
                 console.log("empresa");
                 return res.redirect(`empresa/index`);

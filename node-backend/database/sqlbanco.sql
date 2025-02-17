@@ -79,6 +79,15 @@ CREATE TABLE IF NOT EXISTS `Vaga` (
   FOREIGN KEY (`empresa_id`) REFERENCES `Empresa`(`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS `Empresa_Usuario`;
+CREATE TABLE IF NOT EXISTS `Empresa_Usuario` (
+  `usuario_id` BIGINT UNSIGNED NOT NULL,
+  `empresa_id` BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`usuario_id`),
+  FOREIGN KEY (`usuario_id`) REFERENCES `Usuario`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`empresa_id`) REFERENCES `Empresa`(`id`) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table Candidatura
 -- -----------------------------------------------------

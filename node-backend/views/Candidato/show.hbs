@@ -66,13 +66,13 @@
         <!-- Currículo -->
         <div class="content">
 
-            <form action="/candidato/edit/{{candidato.id}}" method="get">
+            <form action="/candidato/index/{{candidato.id}}" method="get">
 
                 <h2 class="text-center">Currículo de {{candidato.nome}}</h2>
 
                 <div class="text-center">
                     <!-- Foto do candidato, se não tiver foto, exibe uma imagem padrão -->
-                    <img src="/node-backend/public/img/{{#if candidato.foto}}{{candidato.foto}}{{else}}default-avatar.png{{/if}}"
+                    <img src="/node-backend/public/img/{{#if candidato.foto}}{{candidato.foto}}{{else}}naruto.jpg{{/if}}"
                         alt="Foto de {{candidato.nome}}" class="rounded-circle" width="150">
                 </div>
 

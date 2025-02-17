@@ -33,6 +33,7 @@ class EmpresaModel {
         return null;
     }
 
+
     static async findAll() {
         const result = await DataBase.executeSQLQuery(`SELECT * FROM Empresa`);
         if (result && result.length > 0) {
