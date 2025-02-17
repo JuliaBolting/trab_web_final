@@ -36,9 +36,18 @@ class VagaModel {
     }
 
     static async findOne(id) {
-        const result = await DataBase.executeSQLQuery(`SELECT * FROM Vaga WHERE Vaga.id = ?`, [id]);
-        if (result && result.length == 1)
+        const result = await DataBase.executeSQLQuery(`SELECT * FROM Vaga WHERE id = ?`, [id]);
+        if (result && result.length === 1) {
             return new VagaModel(result[0]);
+        }
+        return null;
+    }
+    
+    static async findByPk(id) {
+        const result = await DataBase.executeSQLQuery(`SELECT * FROM Vaga WHERE id = ?`, [id]);
+        if (result && result.length === 1) {
+            return new VagaModel(result[0]);
+        }
         return null;
     }
 
@@ -50,50 +59,53 @@ class VagaModel {
                 return obj;
             });
             return modelArray;
+            
         }
         return [];
     }
 
     async save() {
-        const timestamp = (new Date()).toISOString().slice(0, 19).replace('T', ' ');
-        const result = await DataBase.executeSQLQuery(`INSERT INTO Vaga VALUES (null, ?, ?, ?, ?, ?, ?, ?);`,
-            [
-                this.empresa_id,
-                this.titulo,
-                this.descricao,
-                this.salario,
-                this.quantidade,
-                this.status,
-                timestamp,
-                timestamp
-            ]
+        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Formata a data
+        const result = await DataBase.executeSQLQuery(
+            `INSERT INTO Vaga (empresa_id, titulo, descricao, salario, quantidade, status, dataCriacao, dataAtualizacao) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [this.empresa_id, this.titulo, this.descricao, this.salario, this.quantidade, this.status, timestamp, timestamp]
         );
-        const vaga = await DataBase.executeSQLQuery(`SELECT * FROM Vaga WHERE Vaga.id = ?`, [result.insertId]);
+        const vaga = await DataBase.executeSQLQuery(
+            `SELECT * FROM Vaga WHERE id = ?`, 
+            [result.insertId]
+        );
         return new VagaModel(vaga[0]);
     }
 
     async update() {
-        const timestamp = (new Date()).toISOString().slice(0, 19).replace('T', ' ');
-        const result = await DataBase.executeSQLQuery(`UPDATE Vaga
-                                                       SET titulo = ?, descricao = ?, salario = ?, quantidade = ?, status = ?, dataAtualizacao = ?
-                                                       WHERE Vaga.id = ?`,
-            [
-                this.titulo,
-                this.descricao,
-                this.salario,
-                this.quantidade,
-                this.status,
-                timestamp,
-                this.id
-            ]
+        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Formata a data
+        const result = await DataBase.executeSQLQuery(
+            `UPDATE Vaga SET titulo = ?, descricao = ?, salario = ?, quantidade = ?, status = ?, dataAtualizacao = ? WHERE id = ?`,
+            [this.titulo, this.descricao, this.salario, this.quantidade, this.status, timestamp, this.id]
         );
-        const vaga = await DataBase.executeSQLQuery(`SELECT * FROM Vaga WHERE Vaga.id = ?`, [this.id]);
+        const vaga = await DataBase.executeSQLQuery(
+            `SELECT * FROM Vaga WHERE id = ?`, 
+            [this.id]
+        );
         return new VagaModel(vaga[0]);
     }
 
     async delete() {
-        const result = await DataBase.executeSQLQuery(`DELETE FROM Vaga WHERE Vaga.id = ?`, [this.id]);
+        await DataBase.executeSQLQuery(`DELETE FROM Vaga WHERE id = ?`, [this.id]);
         return this;
+    }
+
+    static async store(candidatoId, vagaId) {
+        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Formata a data
+
+        const result = await DataBase.executeSQLQuery(
+            `INSERT INTO Candidatura (candidato_id, vaga_id, status, dataCriacao, dataAtualizacao) 
+            VALUES (?, ?, 'pendente', ?, ?)`,
+            [candidatoId, vagaId, timestamp, timestamp]
+        );
+
+        return result;
     }
 }
 

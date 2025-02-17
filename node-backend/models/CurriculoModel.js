@@ -107,6 +107,13 @@ class CurriculoModel {
         }
     }
 
+    static async atualizarDisponibilidade(id, disponivel) {
+        return await DataBase.executeSQLQuery(
+            `UPDATE Candidato SET disponivel = ? WHERE id = ?`, 
+            [disponivel, id]
+        );
+    }
+
     static async findCandidatoId (candidatoId) {
         try {
             const query = 'SELECT * FROM candidato WHERE id = ?';

@@ -216,6 +216,34 @@ class UsuarioModel {
         }
     }
 
+    // Função para buscar as inscrições de um candidato
+    static async getInscricoesCandidato(candidatoId) {
+        try {
+            const inscricoes = await DataBase.executeSQLQuery(
+                'SELECT c.id, v.titulo, e.nome AS empresa, c.status FROM Candidatura c ' +
+                'JOIN Vaga v ON c.vaga_id = v.id ' +
+                'JOIN Empresa e ON v.empresa_id = e.id ' +
+                'WHERE c.candidato_id = ?', [candidatoId]
+            );
+            return inscricoes;
+        } catch (error) {
+            throw new Error("Erro ao buscar as inscrições do candidato.");
+        }
+    }
+    // Função para cancelar inscrição
+    static async cancelarInscricao(inscricaoId) {
+        try {
+            const result = await DataBase.executeSQLQuery(
+                'DELETE FROM Candidatura WHERE id = ?', [inscricaoId]
+            );
+            return result.affectedRows > 0; // Retorna true se a exclusão foi bem-sucedida
+        } catch (error) {
+            throw new Error("Erro ao cancelar a inscrição.");
+        }
+    }
+
+
+
     // Método para verificar se o usuário é candidato ou funcionário
     getTipo() {
         return this.tipo; // onde 'tipo' é 'candidato' ou 'funcionario'

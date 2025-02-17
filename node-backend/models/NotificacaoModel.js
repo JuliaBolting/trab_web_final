@@ -25,39 +25,35 @@ class NotificacaoModel {
 
     static async findOne(id) {
         const result = await DataBase.executeSQLQuery(`SELECT * FROM Notificacao WHERE Notificacao.id = ?`, [id]);
-        if (result && result.length == 1)
+        if (result && result.length === 1) {
             return new NotificacaoModel(result[0]);
+        }
         return null;
     }
 
     static async findAll() {
         const result = await DataBase.executeSQLQuery(`SELECT * FROM Notificacao`);
         if (result && result.length > 0) {
-            const modelArray = result.map(function (obj) {
-                obj = new NotificacaoModel(obj);
-                return obj;
-            });
-            return modelArray;
+            return result.map(obj => new NotificacaoModel(obj));
         }
         return [];
     }
 
-    async save() {
-        const timestamp = (new Date()).toISOString().slice(0, 19).replace('T', ' ');
-        const result = await DataBase.executeSQLQuery(`INSERT INTO Notificacao VALUES (null, ?, ?, ?, ?);`,
-            [
-                this.usuario_id,
-                this.mensagem,
-                this.tipo,
-                timestamp
-            ]
+    static async save() {
+        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Formata a data
+        const result = await DataBase.executeSQLQuery(
+            `INSERT INTO Notificacao (usuario_id, mensagem, tipo, dataCriacao) VALUES (?, ?, ?, ?)`,
+            [this.usuario_id, this.mensagem, this.tipo, timestamp]
         );
-        const notificacao = await DataBase.executeSQLQuery(`SELECT * FROM Notificacao WHERE Notificacao.id = ?`, [result.insertId]);
+        const notificacao = await DataBase.executeSQLQuery(
+            `SELECT * FROM Notificacao WHERE id = ?`, 
+            [result.insertId]
+        );
         return new NotificacaoModel(notificacao[0]);
     }
 
     async delete() {
-        const result = await DataBase.executeSQLQuery(`DELETE FROM Notificacao WHERE Notificacao.id = ?`, [this.id]);
+        await DataBase.executeSQLQuery(`DELETE FROM Notificacao WHERE id = ?`, [this.id]);
         return this;
     }
 }

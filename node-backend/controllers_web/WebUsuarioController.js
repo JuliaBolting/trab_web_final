@@ -112,6 +112,7 @@ class WebUsuarioController {
             // Armazena as informações do usuário na sessão
             console.log("req.session.usuario");
             req.session.usuario = { id: usuario.id, nome: usuario.nome, email: usuario.email, tipo: usuario.tipo };
+            //req.session.id = usuario.id;
             console.log("danger req.session.usuario");
             req.session.message = ["success", `Bem-vindo, ${usuario.nome}!`];
 
@@ -120,9 +121,9 @@ class WebUsuarioController {
             if (usuario.tipo === 'candidato') {
                 console.log("candidato");
                 return res.redirect(`/Candidato/show/${usuario.id}`);
-            } else if (usuario.tipo === 'funcionario') {
-                console.log("funcionario");
-                return res.redirect(`/Empresa/show/${usuario.id}`);
+            } else if (usuario.tipo === 'empresa') {
+                console.log("empresa");
+                return res.redirect(`empresa/index`);
             } else {
                 req.session.message = ["danger", "Tipo de usuário inválido."];
                 console.log("inválido");
@@ -172,13 +173,13 @@ class WebUsuarioController {
     async novaSenha(req, res) {
         console.log("Dados recebidos:", req.body); // Verifica os valores recebidos
         const { id, senha } = req.body;
-    
+
         if (!id || !senha) {
             return res.render('usuario/newPassword', {
                 error: 'ID ou senha ausente. Tente novamente.'
             });
         }
-    
+
         try {
             await UsuarioModel.updatePassword(id, senha);
             res.render('usuario/newPassword', {
@@ -191,7 +192,44 @@ class WebUsuarioController {
             });
         }
     }
+
+    async inscricoes(req, res) {
+        try {
+            console.log("inscricoes");
+            const candidatoId = req.session.usuario.id;
+            console.log("inscricoes, candidatoId", candidatoId);
     
+            // Chamar a função do modelo para buscar as inscrições
+            const inscricoes = await UsuarioModel.getInscricoesCandidato(candidatoId);
+            console.log("inscricoes, inscricoes", inscricoes);
+    
+            // Passar as inscrições para a view
+            return res.render('candidato/inscricoes', { inscricoes });
+        } catch (error) {
+            req.session.message = ["danger", "Erro ao carregar as inscrições."];
+            return res.redirect('candidato/inscricoes'); // Em caso de erro
+        }
+    }
+
+    // Cancelar Inscrição
+    async cancelarInscricao(req, res) {
+        try {
+            const inscricaoId = req.params.id;
+    
+            // Chamar a função do modelo para cancelar a inscrição
+            const sucesso = await UsuarioModel.cancelarInscricao(inscricaoId);
+    
+            if (sucesso) {
+                return res.json({ success: true });
+            } else {
+                return res.json({ success: false });
+            }
+        } catch (error) {
+            console.error('Erro ao cancelar inscrição:', error);
+            return res.json({ success: false });
+        }
+    }
+
 
 }
 

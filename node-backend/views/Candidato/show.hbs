@@ -36,75 +36,102 @@
 </head>
 
 <body>
+
+    <div class="row text-center my-3">
+        <div>
+            <h1>LinkadIn</h1>
+            <h1>Talentos e Oportunidades</h1>
+        </div>
+    </div>
     <div class="container main-container">
         <!-- Sidebar Esquerda -->
         <div class="sidebar">
             <button class="btn btn-primary w-100 mb-2">Currículo</button>
-            <button class="btn btn-outline-primary w-100 mb-2">Vagas</button>
-            <button class="btn btn-outline-primary w-100">Inscrições</button>
+
+            <form action="/candidato/vagas" method="get">
+                <a href="/candidato/vagas">
+                    <button type="submit" class="btn btn-outline-primary w-100">Vagas</button>
+                </a>
+            </form>
+
+            </form>
+            <form action="/candidato/inscricoes" method="get">
+                <a href="/candidato/inscricoes">
+                    <button type="submit" class="btn btn-outline-primary w-100">Inscrições</button>
+                </a>
+            </form>
+
         </div>
 
         <!-- Currículo -->
         <div class="content">
-            
+
             <form action="/candidato/edit/{{candidato.id}}" method="get">
-            
-            <h2 class="text-center">Currículo de {{candidato.nome}}</h2>
 
-            <div class="text-center">
-                <img src="/node-backend/public/img/{{candidato.foto}}" alt="Foto de {{candidato.nome}}" class="rounded-circle" width="150">
-            </div>
+                <h2 class="text-center">Currículo de {{candidato.nome}}</h2>
 
-            <p><strong>Área de Interesse:</strong> {{candidato.setor}}</p>
-            <p><strong>Localização:</strong> {{candidato.localizacao}}</p>
-            <p><strong>Resumo:</strong> {{candidato.resumo}}</p>
-            <p><strong>Disponível para trabalho:</strong> {{#if candidato.disponivel}}Sim{{else}}Não{{/if}}</p>
+                <div class="text-center">
+                    <!-- Foto do candidato, se não tiver foto, exibe uma imagem padrão -->
+                    <img src="/node-backend/public/img/{{#if candidato.foto}}{{candidato.foto}}{{else}}default-avatar.png{{/if}}"
+                        alt="Foto de {{candidato.nome}}" class="rounded-circle" width="150">
+                </div>
 
-            <hr>
+                <p><strong>Área de Interesse:</strong> {{#if candidato.setor}}{{candidato.setor}}{{else}}Não
+                    especificado{{/if}}</p>
+                <p><strong>Localização:</strong> {{#if candidato.localizacao}}{{candidato.localizacao}}{{else}}Não
+                    especificado{{/if}}</p>
+                <p><strong>Resumo:</strong> {{#if candidato.resumo}}{{candidato.resumo}}{{else}}Não especificado{{/if}}
+                </p>
+                <p><strong>Disponível para trabalho:</strong> <span id="disponibilidadeText">{{#if
+                        candidato.disponivel}}Sim{{else}}Não{{/if}}</span></p>
 
-            <!-- Formação Acadêmica -->
-            <h3>Formação Acadêmica</h3>
-            <p>Formações encontradas: {{formacoes.length}}</p> <!-- Para garantir o número de entradas -->
-            {{#if formacoes.length}}
-            <ul>
-                {{#each formacoes}}
-                <li>
-                    <strong>{{this.curso}}</strong> - {{this.instituicao}} ({{this.ano_inicio}} -
-                    {{this.ano_conclusao}})
-                </li>
-                {{/each}}
-            </ul>
-            {{else}}
-            <p>Nenhuma formação acadêmica cadastrada.</p>
-            {{/if}}
 
-            <hr>
 
-            <!-- Certificações -->
-            <h3>Certificações</h3>
-            {{#if certificacoes.length}}
-            <ul>
-                {{#each certificacoes}}
-                <li>
-                    <strong>{{this.nome}}</strong> - {{this.instituicao}} (Obtido em: {{this.data_obtencao}})
-                    {{#if this.validade}} - Válido até: {{this.validade}}{{/if}}
-                    {{#if this.link_certificado}}
-                    <a href="{{this.link_certificado}}" target="_blank">Ver Certificado</a>
-                    {{/if}}
-                </li>
-                {{/each}}
-            </ul>
-            {{else}}
-            <p>Nenhuma certificação cadastrada.</p>
-            {{/if}}
+                <hr>
 
-            <hr>
+                <!-- Formação Acadêmica -->
+                <h3>Formação Acadêmica</h3>
+                <p>Formações encontradas: {{formacoes.length}}</p> <!-- Para garantir o número de entradas -->
+                {{#if formacoes.length}}
+                <ul>
+                    {{#each formacoes}}
+                    <li>
+                        <strong>{{this.curso}}</strong> - {{this.instituicao}} ({{this.ano_inicio}} -
+                        {{this.ano_conclusao}})
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p>Nenhuma formação acadêmica cadastrada.</p>
+                {{/if}}
 
-            <!-- Link para editar o currículo -->
-            <a href="/candidato/edit/{{candidato.id}}">
-                <button type="submit" class="btn btn-outline-secondary w-100 mt-2">Editar Currículo</button>
-            </a>
-            
+                <hr>
+
+                <!-- Certificações -->
+                <h3>Certificações</h3>
+                {{#if certificacoes.length}}
+                <ul>
+                    {{#each certificacoes}}
+                    <li>
+                        <strong>{{this.nome}}</strong> - {{this.instituicao}} (Obtido em: {{this.data_obtencao}})
+                        {{#if this.validade}} - Válido até: {{this.validade}}{{/if}}
+                        {{#if this.link_certificado}}
+                        <a href="{{this.link_certificado}}" target="_blank">Ver Certificado</a>
+                        {{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+                {{else}}
+                <p>Nenhuma certificação cadastrada.</p>
+                {{/if}}
+
+                <hr>
+
+                <!-- Link para editar o currículo -->
+                <a href="/candidato/edit/{{candidato.id}}">
+                    <button type="submit" class="btn btn-outline-secondary w-100 mt-2">Editar Currículo</button>
+                </a>
+
             </form>
         </div>
 
@@ -113,7 +140,7 @@
         <div class="notifications">
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="procurandoEmprego" {{#if
-                    candidato.procurandoEmprego}}checked{{/if}}>
+                    candidato.disponivel}}checked{{/if}} onchange="atualizarDisponibilidade('{{candidato.id}}')">
                 <label class="form-check-label" for="procurandoEmprego">Procurando Emprego</label>
             </div>
             <h4>Notificações</h4>
@@ -125,6 +152,38 @@
             {{/each}}
         </div>
     </div>
+
+    <script>
+        function atualizarDisponibilidade(candidatoId) {
+            const disponivel = document.getElementById('procurandoEmprego').checked ? 1 : 0;
+            const disponibilidadeText = document.getElementById('disponibilidadeText');
+            if (disponivel) {
+                disponibilidadeText.textContent = 'Sim';
+            } else {
+                disponibilidadeText.textContent = 'Não';
+            }
+
+            fetch(`/candidato/atualizarDisponibilidade/${candidatoId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ disponivel })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (data.success) {
+                        console.log("Status atualizado com sucesso!");
+                    } else {
+                        alert("Erro ao atualizar status!");
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Erro ao atualizar disponibilidade:", error);
+                });
+        }
+    </script>
+
 </body>
 
 </html>

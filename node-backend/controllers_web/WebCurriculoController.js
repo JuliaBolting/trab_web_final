@@ -9,11 +9,26 @@ class WebCurriculoController {
             console.log(id);
 
             // Buscar candidato pelo ID
-            const candidato = await CurriculoModel.findCandidatoId(id);
+            let candidato = await CurriculoModel.findCandidatoId(id);
+
+            // Caso não tenha candidato, use as informações do usuário
             if (!candidato) {
-                return res.status(404).send('Candidato não encontrado');
+                const usuario = req.session.usuario;
+                if (!usuario) {
+                    return res.status(404).send('Usuário não encontrado');
+                }
+                candidato = {
+                    id: usuario.id,
+                    nome: usuario.nome,
+                    foto: null, // Adapte conforme necessário, por exemplo, defina uma foto padrão
+                    foto_capa: null, // Adapte conforme necessário
+                    localizacao: null, // Deixe vazio ou defina um valor padrão
+                    setor: null, // Deixe vazio ou defina um valor padrão
+                    resumo: null, // Deixe vazio ou defina um valor padrão
+                    disponivel: true, // Defina como verdadeiro ou de acordo com sua lógica
+                    notificacoes: [] // Deixe vazio ou ajuste conforme a necessidade
+                };
             }
-            console.log(candidato);
 
             // Buscar formações acadêmicas do candidato
             const formacoes = await CurriculoModel.findFormacaoCandidatoId(id);
@@ -26,14 +41,15 @@ class WebCurriculoController {
             // Renderizar a view passando os dados
             res.render('candidato/show', {
                 candidato,
-                formacoes: formacoes,
-                certificacoes: certificacoes
+                formacoes,
+                certificacoes
             });
         } catch (error) {
             console.error('Erro ao buscar currículo:', error);
             res.status(500).send('Erro interno do servidor');
         }
     }
+
     async index(req, res) {
         try {
             const { id } = req.params;
@@ -54,7 +70,7 @@ class WebCurriculoController {
             const certificacoes = await CurriculoModel.findCerificacaoCandidatoId(id);
             console.log(certificacoes);
 
-            
+
             res.render('candidato/edit', {
                 candidato,
                 formacoes: formacoes,
@@ -94,6 +110,27 @@ class WebCurriculoController {
             res.status(500).send("Erro ao atualizar currículo.");
         }
     }
+
+    async atualizarDisponibilidade(req, res) {
+        try {
+            const { id } = req.params;
+            const { disponivel } = req.body;
+
+            console.log("Recebido:", { id, disponivel });
+
+            if (typeof disponivel === 'undefined') {
+                return res.status(400).json({ success: false, message: "Campo 'disponivel' é obrigatório" });
+            }
+
+            await CurriculoModel.atualizarDisponibilidade(id, disponivel);
+
+            res.json({ success: true, message: "Disponibilidade atualizada!" });
+        } catch (error) {
+            console.error("Erro ao atualizar disponibilidade:", error);
+            res.status(500).json({ success: false, message: "Erro interno do servidor" });
+        }
+    }
+
 
 }
 

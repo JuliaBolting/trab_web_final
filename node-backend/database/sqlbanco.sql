@@ -84,12 +84,13 @@ CREATE TABLE IF NOT EXISTS `Vaga` (
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Candidatura`;
 CREATE TABLE IF NOT EXISTS `Candidatura` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, -- Campo de ID
   `candidato_id` BIGINT UNSIGNED NOT NULL,
   `vaga_id` BIGINT UNSIGNED NOT NULL,
   `status` ENUM('pendente', 'entrevista', 'aprovado', 'reprovado') NOT NULL DEFAULT 'pendente',
   `dataCriacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `dataAtualizacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`candidato_id`, `vaga_id`),
+  PRIMARY KEY (`id`), -- Definindo o campo `id` como chave primária
   FOREIGN KEY (`candidato_id`) REFERENCES `Candidato` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`vaga_id`) REFERENCES `Vaga` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB;
